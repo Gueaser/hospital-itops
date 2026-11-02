@@ -1,4 +1,7 @@
 package com.ye.hospitalitops.mapper;
 
-public class AssetMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ye.hospitalitops.entity.Asset;
+
+public interface AssetMapper extends BaseMapper<Asset> {
 }
