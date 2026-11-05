@@ -1,14 +1,17 @@
 package com.ye.hospitalitops.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ye.hospitalitops.entity.Asset;
 import com.ye.hospitalitops.mapper.AssetMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
-@RestController
+@RestController//返回的数据请直接变成 JSON
 @RequestMapping("/api/assets")
 public class AssetController {
 
@@ -20,8 +23,15 @@ public class AssetController {
     }
 
     @GetMapping
-    //返回值直接是 List<Asset>，没有 Result<T> 包装。这是 v0.1 的简化，等 D8 做统一响应体时再改。
-    public List<Asset> list() {
-        return assetMapper.selectList(null);// null 表示没有 where 条件。想加条件就传 QueryWrapper，第 5 周会用到
+    //IPage 规定了返回值中必须有，current当前时期几页，size每页多少条，total共有多少条，records这一页的具体数据列表
+    public IPage<Asset> list(@RequestParam(required = false) String dept,//所有传入的参数都是从浏览器网页发过来的
+                             @RequestParam(required = false) String status,
+                             @RequestParam(defaultValue = "1") long page,
+                             @RequestParam(defaultValue = "10") long size) {
+        Page<Asset> pageProgram = new Page<>(page,size);
+        LambdaQueryWrapper<Asset> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(dept!=null,Asset::getDept,dept);
+        wrapper.eq(status != null, Asset::getStatus, status);
+        return assetMapper.selectPage(pageProgram, wrapper);
     }
 }
