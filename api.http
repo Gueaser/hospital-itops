@@ -9,7 +9,7 @@ POST http://localhost:8080/api/assets
 Content-Type: application/json
 
 {
-  "assetCode": "ZC-0021",
+  "assetCode": "ZC-0022",
   "name": "测试打印机",
   "category": "PRINTER",
   "dept": "信息科",

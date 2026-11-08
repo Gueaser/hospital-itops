@@ -7,6 +7,8 @@ import com.ye.hospitalitops.dto.AssetCreateRequest;
 import com.ye.hospitalitops.entity.Asset;
 import com.ye.hospitalitops.mapper.AssetMapper;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +28,8 @@ public class AssetController {
     //IPage 规定了返回值中必须有，current当前时期几页，size每页多少条，total共有多少条，records这一页的具体数据列表
     public  IPage<Asset> list(@RequestParam(required = false) String dept,
                               @RequestParam(required = false) String status,
-                              @RequestParam(defaultValue = "1") long page,
-                              @RequestParam(defaultValue ="10") long size)  {
+                              @RequestParam(defaultValue = "1")@Min(1) long page,
+                              @RequestParam(defaultValue ="10")@Max(100) long size)  {
         Page<Asset>pageGram=new Page<>(page,size);
         LambdaQueryWrapper<Asset> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(dept!=null,Asset::getDept,dept);

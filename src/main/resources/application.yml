@@ -1,3 +1,4 @@
+
 server:
   port: 8080
 
@@ -5,8 +6,11 @@ spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/hospital_ops?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false"
     username: root
-    password: 86202887hcBZ*
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson: #严格反序列化，我将location拼错了，但其字段本身没有任何限制（NOTBLANK），导致JSON传"location":"行政楼4层"时，Jackson找不到location字段直接静默跳过，使数据库字段为null
+      deserialization:
+        fail-on-unknown-properties: true  #开发阶段就该开，上线前可以关（更兼容）。
 
 mybatis-plus:
   configuration:
