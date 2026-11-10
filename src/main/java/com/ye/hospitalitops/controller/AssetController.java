@@ -3,6 +3,7 @@ package com.ye.hospitalitops.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ye.hospitalitops.common.Result;
 import com.ye.hospitalitops.dto.AssetCreateRequest;
 import com.ye.hospitalitops.entity.Asset;
 import com.ye.hospitalitops.mapper.AssetMapper;
@@ -26,23 +27,23 @@ public class AssetController {
 
     @GetMapping//同下
     //IPage 规定了返回值中必须有，current当前时期几页，size每页多少条，total共有多少条，records这一页的具体数据列表
-    public  IPage<Asset> list(@RequestParam(required = false) String dept,
+    public  Result<IPage<Asset>> list(@RequestParam(required = false) String dept,
                               @RequestParam(required = false) String status,
-                              @RequestParam(defaultValue = "1")@Min(1) long page,
-                              @RequestParam(defaultValue ="10")@Max(100) long size)  {
+                              @RequestParam(defaultValue = "1")@Min(value = 1,message = "页数最小为1") long page,
+                              @RequestParam(defaultValue ="10")@Max(value = 100,message = "每页最多 100 条") long size)  {
         Page<Asset>pageGram=new Page<>(page,size);
         LambdaQueryWrapper<Asset> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(dept!=null,Asset::getDept,dept);
         wrapper.eq(status!=null,Asset::getStatus,status);
-        return assetMapper.selectPage(pageGram,wrapper);
+        return Result.ok(assetMapper.selectPage(pageGram,wrapper));
 
     }
     @PostMapping//RequestMapping是通用型如果要实现POST功能要写成（value="/add",method=REquestMethod.POST）
-    public Long add(@RequestBody @Valid AssetCreateRequest req) {//@RequestBody：把请求体里的 JSON 反序列化成对象（Jackson);@Valid：触发 DTO 上那些 @NotBlank 之类的校验。
+    public Result<Long> add(@RequestBody @Valid AssetCreateRequest req) {//@RequestBody：把请求体里的 JSON 反序列化成对象（Jackson);@Valid：触发 DTO 上那些 @NotBlank 之类的校验。
         Asset asset=new Asset();
         BeanUtils.copyProperties(req, asset);
         if(asset.getStatus()==null) asset.setStatus("RUNNING");
         assetMapper.insert(asset);
-        return asset.getId();
+        return Result.ok(asset.getId());
     }
 }
