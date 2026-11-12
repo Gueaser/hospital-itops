@@ -7,7 +7,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,11 +16,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    public GlobalExceptionHandler(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Result<Void>> handleValid(MethodArgumentNotValidException e){
@@ -60,6 +54,10 @@ public class GlobalExceptionHandler {
         String exceptedType= e.getRequiredType()!=null?e.getRequiredType().getSimpleName():"正确类型";
         String combinedMessage= "参数" + e.getName() + "必须为" + exceptedType;
         return ResponseEntity.status(400).body(Result.fail(400,combinedMessage));
+    }
+    @ExceptionHandler(BizException.class)
+    public ResponseEntity<Result<Void>> handleBiz(BizException e){
+        return ResponseEntity.status(e.getCode()).body(Result.fail(e.getCode(),e.getMessage()));
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result<Void>> handleOther(Exception e){

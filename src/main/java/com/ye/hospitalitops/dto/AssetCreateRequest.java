@@ -28,7 +28,7 @@ public class AssetCreateRequest {
     @Max(value = 3,message = "重要级别只能是1/2/3")
     private Integer criticalLevel;
 
-    @Pattern(regexp="RUNNING|DEGRADED|DOWN|SCRAPPED")
+    @Pattern(regexp="RUNNING|DEGRADED|DOWN|SCRAPPED",message = "status状态只能为RUNNING/DEGRADED/DOWN/SCRAPPED其一")
     private String status;
 
     private String owner;

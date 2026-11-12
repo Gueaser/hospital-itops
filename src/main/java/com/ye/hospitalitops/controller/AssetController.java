@@ -3,8 +3,10 @@ package com.ye.hospitalitops.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ye.hospitalitops.common.BizException;
 import com.ye.hospitalitops.common.Result;
 import com.ye.hospitalitops.dto.AssetCreateRequest;
+import com.ye.hospitalitops.dto.AssetUpdateRequest;
 import com.ye.hospitalitops.entity.Asset;
 import com.ye.hospitalitops.mapper.AssetMapper;
 import jakarta.validation.Valid;
@@ -30,7 +32,7 @@ public class AssetController {
     public  Result<IPage<Asset>> list(@RequestParam(required = false) String dept,
                               @RequestParam(required = false) String status,
                               @RequestParam(defaultValue = "1")@Min(value = 1,message = "页数最小为1") long page,
-                              @RequestParam(defaultValue ="10")@Max(value = 100,message = "每页最多 100 条") long size)  {
+                              @RequestParam(defaultValue ="10")@Max(value = 100,message = "每页最多 100 条")@Min(value = 1,message = "每页最少1条") long size)  {
         Page<Asset>pageGram=new Page<>(page,size);
         LambdaQueryWrapper<Asset> wrapper=new LambdaQueryWrapper<>();
         wrapper.eq(dept!=null,Asset::getDept,dept);
@@ -45,5 +47,23 @@ public class AssetController {
         if(asset.getStatus()==null) asset.setStatus("RUNNING");
         assetMapper.insert(asset);
         return Result.ok(asset.getId());
+    }
+    @PutMapping("/{id}")
+    public Result<Void> update(@PathVariable long id, @RequestBody @Valid AssetUpdateRequest req){
+        Asset asset=assetMapper.selectById(id);
+        if(asset==null){
+            throw new BizException(404,"资产不存在");
+        }
+        BeanUtils.copyProperties(req, asset);
+        assetMapper.updateById(asset);// 依赖 updateById 忽略 null 字段：未传的字段保持原值
+        return Result.ok();
+    }
+    @DeleteMapping("/{id}")
+    public Result<Void> delete(@PathVariable long id){
+        int row=assetMapper.deleteById(id);
+        if(row==0){
+            throw  new BizException(404,"资产不存在");
+        }
+        return Result.ok();
     }
 }

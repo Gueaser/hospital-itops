@@ -17,3 +17,48 @@ Content-Type: application/json
   "criticalLevel": 3,
   "owner": "吴涛"
 }
+
+### 正常修改 (PUT id=24，改 name)
+PUT http://localhost:8080/api/assets/21
+Content-Type: application/json
+
+{
+  "name": "打印机",
+  "category": "PRINTER",
+  "dept": "信息科",
+  "location": "行政楼5层",
+  "criticalLevel": 2,
+  "owner": "吴涛"
+}
+
+### 修改不存在的ID (PUT id=999)
+PUT http://localhost:8080/api/assets/999
+Content-Type: application/json
+
+{
+  "name": "幽灵设备",
+  "category": "PRINTER",
+  "dept": "信息科",
+  "location": "虚空",
+  "criticalLevel": 1,
+  "owner": "没人"
+}
+
+### 正常删除 (DELETE id=24)
+DELETE http://localhost:8080/api/assets/24
+
+### 删除不存在的ID (DELETE id=999)
+DELETE http://localhost:8080/api/assets/999
+
+### 强行塞入 assetCode 测试严格模式
+PUT http://localhost:8080/api/assets/24
+Content-Type: application/json
+
+{
+  "assetCode": "ZC-9999",
+  "name": "试图篡改编号",
+  "category": "PRINTER",
+  "dept": "信息科",
+  "criticalLevel": 1,
+  "owner": "吴涛"
+}
