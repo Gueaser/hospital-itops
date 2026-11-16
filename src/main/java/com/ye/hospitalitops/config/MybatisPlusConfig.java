@@ -5,10 +5,13 @@ package com.ye.hospitalitops.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@MapperScan("com.ye.hospitalitops.mapper")//测试时将MapperScan转移到这里，因为测试类启动时扫描到这个就会强制连接数据库，但是测试类没配置数据类，
+                                            // 还放在原本的HospitalItopsApplication.java下面的话就会报错，，放到这里@Configuration下面的在轻量级测试中不加载
 public class MybatisPlusConfig {
 
     @Bean

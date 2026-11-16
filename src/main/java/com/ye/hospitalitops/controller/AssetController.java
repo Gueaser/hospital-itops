@@ -28,7 +28,7 @@ public class AssetController {
     // 问“为什么”，答“便于单元测试和不可变”。↓
     public AssetController(AssetMapper assetMapper) {
         this.assetMapper = assetMapper;
-    }
+    }//如果你这个类只有一个构造函数，它默认就会帮你自动装配（偷偷加上 @Autowired 的效果）。
 
     @GetMapping//同下
     @Operation(summary = "分页查询资产列表", description = "支持按科室(dept)和状态(status)进行动态筛选。如果不传page和size，默认返回第一页的10条数据。")
