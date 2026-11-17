@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
   "assetCode": "ZC-0022",
-  "name":"",
+  "name":"测试打印机",
   "category": "PRINTER",
   "dept": "信息科",
   "location": "行政楼4层",
