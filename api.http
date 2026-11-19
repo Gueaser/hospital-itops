@@ -45,7 +45,7 @@ Content-Type: application/json
 }
 
 ### 正常删除 (DELETE id=24)
-DELETE http://localhost:8080/api/assets/24
+DELETE http://localhost:8080/api/assets/22
 
 ### 删除不存在的ID (DELETE id=999)
 DELETE http://localhost:8080/api/assets/999

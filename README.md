@@ -1,4 +1,5 @@
 # 医院 IT 运维平台 · 资产台账（v0.1）
+▶ **演示视频**：[B 站](https://www.bilibili.com/video/BV1DnsU6JECL) ｜ [备用下载](https://github.com/Gueaser/hospital-itops/releases/download/v0.1.0/demo-v0.1.0.mp4)
 
 > 面向医院信息科的轻量资产台账后端。从零独立完成，Spring Boot 4 + MyBatis-Plus + MySQL 8。
 
